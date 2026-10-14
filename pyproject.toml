@@ -9,8 +9,10 @@ dependencies = [
     "sqlalchemy>=2.0",
     "alembic>=1.13",
     "psycopg[binary]>=3.1",
+    "pydantic[email]>=2.6",
     "pydantic-settings>=2.2",
     "python-jose[cryptography]>=3.3",
+    "bcrypt==4.0.1",
     "passlib[bcrypt]>=1.7",
     "python-multipart>=0.0.9",
 ]
@@ -23,3 +25,38 @@ dev = [
     "ruff>=0.4",
     "mypy>=1.10",
 ]
+
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["alembic*"]
+
+[tool.mypy]
+python_version = "3.11"
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+
+# Полезные проверки, но без фанатизма
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=app --cov-report=term-missing --cov-fail-under=70"
