@@ -1,15 +1,21 @@
 from datetime import datetime
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
+if TYPE_CHECKING:
+    from app.models.note import Note
+
+
 class UserRole(StrEnum):
     USER = "user"
     MODERATOR = "moderator"
     ADMIN = "admin"
+
 
 class User(Base):
     __tablename__ = "users"
@@ -20,8 +26,6 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(255))
     role: Mapped[str] = mapped_column(String(20), default=UserRole.USER)
     is_active: Mapped[bool] = mapped_column(default=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     notes: Mapped[list["Note"]] = relationship(back_populates="author")

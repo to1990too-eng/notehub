@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.note import Note
 from app.schemas.note import NoteCreate, NoteUpdate
 
+
 def create(db: Session, author_id: int, data: NoteCreate) -> Note:
     note = Note(author_id=author_id, **data.model_dump())
     db.add(note)
@@ -11,8 +12,10 @@ def create(db: Session, author_id: int, data: NoteCreate) -> Note:
     db.refresh(note)
     return note
 
+
 def get(db: Session, note_id: int) -> Note | None:
     return db.get(Note, note_id)
+
 
 def list_paginated(
     db: Session,
@@ -37,12 +40,14 @@ def list_paginated(
     ).all()
     return list(items), total
 
+
 def update(db: Session, note: Note, data: NoteUpdate) -> Note:
     for field, value in data.model_dump(exclude_unset=True).items():
         setattr(note, field, value)
     db.commit()
     db.refresh(note)
     return note
+
 
 def delete(db: Session, note: Note) -> None:
     db.delete(note)

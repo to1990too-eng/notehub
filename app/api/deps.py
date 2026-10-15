@@ -1,4 +1,4 @@
-from collections.abc import Generator
+from collections.abc import Callable
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -10,6 +10,7 @@ from app.database import get_db
 from app.models.user import User, UserRole
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
 
 def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -24,9 +25,11 @@ def get_current_user(
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User inactive or missing")
     return user
 
-def require_roles(*roles: UserRole):
+
+def require_roles(*roles: UserRole) -> Callable[[User], User]:
     def checker(current: User = Depends(get_current_user)) -> User:
         if current.role not in {r.value for r in roles}:
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Not enough permissions")
         return current
+
     return checker

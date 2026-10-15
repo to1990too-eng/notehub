@@ -10,6 +10,7 @@ from app.schemas.user import UserCreate, UserRead
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 @router.post("/register", response_model=UserRead, status_code=201)
 def register(data: UserCreate, db: Session = Depends(get_db)):
     if user_crud.get_by_email(db, data.email):
@@ -18,11 +19,12 @@ def register(data: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(400, "Username already taken")
     return user_crud.create(db, data)
 
+
 @router.post("/login", response_model=Token)
 def login(
     form: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
-):
+) -> Token:
     user = user_crud.get_by_email(db, form.username)
     if not user or not verify_password(form.password, user.hashed_password):
         raise HTTPException(
