@@ -7,8 +7,9 @@ from alembic import context
 # --- наши импорты ---
 from app.config import settings
 from app.database import Base
-from app.models.user import User  # noqa: F401
 from app.models.note import Note  # noqa: F401
+from app.models.user import User  # noqa: F401
+
 # --------------------
 
 config = context.config
