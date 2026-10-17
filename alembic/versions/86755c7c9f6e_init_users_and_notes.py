@@ -1,10 +1,11 @@
 """init users and notes
 
 Revision ID: 86755c7c9f6e
-Revises: 
+Revises:
 Create Date: 2026-10-16 19:39:00.710624
 
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -12,7 +13,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = '86755c7c9f6e'
+revision: str = "86755c7c9f6e"
 down_revision: str | Sequence[str] | None = None
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
